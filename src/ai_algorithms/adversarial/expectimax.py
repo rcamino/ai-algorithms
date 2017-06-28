@@ -1,12 +1,16 @@
+from ai_algorithms.environment.agent_estimator import UniformActions
 from ai_algorithms.environment.agent_strategies.agent_strategy import AgentStrategy
 
 
 class Expectimax(AgentStrategy):
 
-    def __init__(self, state_evaluator, agent_estimator, depth):
+    def __init__(self, state_evaluator, depth, agent_estimator=None):
         self.state_evaluator = state_evaluator
-        self.agent_estimator = agent_estimator
         self.depth = depth
+        if agent_estimator is None:
+            self.agent_estimator = UniformActions()
+        else:
+            self.agent_estimator = agent_estimator
 
     def next_action(self, state, agent):
         agents = [agent] + [other_agent for other_agent in sorted(state.agents()) if agent != other_agent]
@@ -43,5 +47,5 @@ class Expectimax(AgentStrategy):
         for action in actions:
             next_state = state.next_state(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, agent_index + 1)
-            result += value * self.agent_estimator.agent_action_probability(state, agent, action)
+            result += value * self.agent_estimator.agent_action_probability(state, agent, actions, action)
         return result
