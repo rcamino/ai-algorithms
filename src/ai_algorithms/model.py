@@ -1,11 +1,5 @@
 class Model(object):
 
-    def states(self):
-        raise NotImplementedError
-
-    def actions(self):
-        raise NotImplementedError
-
     def actions_from(self, state):
         raise NotImplementedError
 
@@ -13,6 +7,15 @@ class Model(object):
         raise NotImplementedError
 
     def is_goal_state(self, state):
+        raise NotImplementedError
+
+
+class CompleteSpace(object):
+
+    def states(self):
+        raise NotImplementedError
+
+    def actions(self):
         raise NotImplementedError
 
 
@@ -35,6 +38,12 @@ class CostAware(object):
 
     def cost(self, state_from, action, state_to):
         raise NotImplementedError
+
+
+class NoCost(CostAware):
+
+    def cost(self, state_from, action, state_to):
+        return 0
 
 
 class RewardAware(object):
