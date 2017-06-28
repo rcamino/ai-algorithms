@@ -1,4 +1,4 @@
-from adversarial.strategy import AgentStrategy
+from environment.strategy import AgentStrategy
 
 
 class AlphaBetaPruning(AgentStrategy):
