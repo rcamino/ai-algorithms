@@ -3,69 +3,71 @@ import random
 from value_iteration import create_initial_values
 
 
-def create_random_policy(model, rnd=None):
-    if rnd is None:
-        rnd = random
-    pi_0 = {}
-    for s in model.states():
-        actions = model.actions_from(s)
+def create_random_policy(model, random_state=None):
+    if random_state is None:
+        random_state = random.getstate()
+    random_policy = {}
+    for state in model.states():
+        actions = model.actions_from(state)
         if len(actions) > 0:
-            pi_0[s] = rnd.choice(actions)
-    return pi_0
+            random_policy[state] = random_state.choice(actions)
+    return random_policy
 
 
-def policy_evaluation(model, pi, v_pi_0=None, discount=1.0, iterations=1000, tolerance=1e-6):
-    if v_pi_0 is None:
-        v_pi_k = create_initial_values(model)
+def policy_evaluation(model, policy, initial_values=None, discount=1.0, iterations=1000, tolerance=1e-6):
+    if initial_values is None:
+        values = create_initial_values(model)
     else:
-        v_pi_k = v_pi_0
-    i = 0
-    while i < iterations:
-        v_pi_k_plus_1 = create_initial_values(model)
-        for s1 in pi.keys():
-            a = pi[s1]
-            v = 0
-            for s2 in model.states_from(s1, a):
-                v += model.probability(s1, a, s2) * (model.reward(s1, a, s2) + discount * v_pi_k[s2])
-            v_pi_k_plus_1[s1] = v
+        values = initial_values
+    iteration = 0
+    while iteration < iterations:
+        next_values = create_initial_values(model)
+        for state_from in policy.keys():
+            action = policy[state_from]
+            value = 0
+            for state_to in model.states_from(state_from, action):
+                value += model.probability(state_from, action, state_to) \
+                         * (model.reward(state_from, action, state_to) + discount * values[state_to])
+            next_values[state_from] = value
         max_change = 0
-        for s in pi.keys():
-            max_change = max(max_change, abs(v_pi_k_plus_1[s] - v_pi_k[s]))
+        for state in policy.keys():
+            max_change = max(max_change, abs(next_values[state] - values[state]))
         if max_change < tolerance:
             break
-        v_pi_k = v_pi_k_plus_1
-        i += 1
-    return v_pi_k
+        values = next_values
+        iteration += 1
+    return values
 
 
-def policy_improvement(model, v_pi_i, discount=1.0):
-    pi_i_plus_1 = {}
-    for s1 in model.states():
-        max_a = None
-        max_v_a = 0
-        for a in model.actions_from(s1):
-            v_a = 0
-            for s2 in model.states_from(s1, a):
-                v_a += model.probability(s1, a, s2) * (model.reward(s1, a, s2) + discount * v_pi_i[s2])
-            if max_a is None or v_a > max_v_a:
-                max_a = a
-                max_v_a = v_a
-        if max_a is not None:
-            pi_i_plus_1[s1] = max_a
-    return pi_i_plus_1
+def policy_improvement(model, values, discount=1.0):
+    next_policy = {}
+    for state_from in model.states():
+        max_action = None
+        max_value = 0
+        for action in model.actions_from(state_from):
+            value = 0
+            for state_to in model.states_from(state_from, action):
+                value += model.probability(state_from, action, state_to) \
+                         * (model.reward(state_from, action, state_to) + discount * values[state_to])
+            if max_action is None or value > max_value:
+                max_action = action
+                max_value = value
+        if max_action is not None:
+            next_policy[state_from] = max_action
+    return next_policy
 
 
-def policy_iteration(model, pi_0=None, discount=1.0, iterations=1000, tolerance=1e-6):
-    if pi_0 is None:
-        pi_i = create_random_policy(model)
+def policy_iteration(model, initial_policy=None, discount=1.0, iterations=1000, tolerance=1e-6):
+    if initial_policy is None:
+        policy = create_random_policy(model)
     else:
-        pi_i = pi_0
-    i = 0
-    while i < iterations:
-        v_pi_i = policy_evaluation(model, pi_i, discount=discount, iterations=iterations, tolerance=tolerance)
-        pi_i_plus_1 = policy_improvement(model, v_pi_i, discount)
-        if all([pi_i_plus_1[s] == pi_i[s] for s in pi_i.keys()]):
+        policy = initial_policy
+    iteration = 0
+    while iteration < iterations:
+        values = policy_evaluation(model, policy, discount=discount, iterations=iterations, tolerance=tolerance)
+        next_policy = policy_improvement(model, values, discount)
+        if all([next_policy[state] == policy[state] for state in policy.keys()]):
             break
-        pi_i = pi_i_plus_1
-        i += 1
-    return pi_i
+        policy = next_policy
+        iteration += 1
+    return policy
