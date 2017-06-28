@@ -38,3 +38,18 @@ def q_value_iteration(mdp, q_0=None, gamma=1.0, iterations=1000, tolerance=1e-6)
         q_k = q_k_plus_1
         i += 1
     return q_k
+
+
+def policy_from_q_values(mdp, q_values):
+    pi = {}
+    for s in mdp.states():
+        max_q_value = 0.0
+        max_action = None
+        for a in mdp.actions_from(s):
+            q_value = q_values[s][a]
+            if max_action is None or q_value > max_q_value:
+                max_action = a
+                max_q_value = q_value
+        if max_action is not None:
+            pi[s] = max_action
+    return pi
