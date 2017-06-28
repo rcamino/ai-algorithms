@@ -1,5 +1,5 @@
+from ai_algorithms.search.graph_search import graph_search
 from search.candidates.priority_queue import CandidatePriorityQueue
-from search.graph_search import graph_search
 from search.strategy import Strategy
 
 

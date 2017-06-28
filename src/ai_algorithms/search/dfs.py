@@ -1,6 +1,6 @@
-from search.candidates.stack import CandidateStack
-from search.graph_search import graph_search
-from search.strategy import Strategy
+from ai_algorithms.search.candidates.stack import CandidateStack
+from ai_algorithms.search.graph_search import graph_search
+from ai_algorithms.search.strategy import Strategy
 
 
 class DFS(Strategy):

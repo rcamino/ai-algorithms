@@ -1,6 +1,6 @@
 from collections import deque
 
-from search.candidates import Candidates
+from ai_algorithms.search.candidates import Candidates
 
 
 class CandidateQueue(Candidates):

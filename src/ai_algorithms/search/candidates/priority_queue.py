@@ -1,6 +1,6 @@
 import heapq
 
-from search.candidates import Candidates
+from ai_algorithms.search.candidates import Candidates
 
 
 class CandidatePriorityQueue(Candidates):

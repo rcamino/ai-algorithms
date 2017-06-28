@@ -1,6 +1,6 @@
 import random
 
-from environment.agent_strategies.agent_strategy import AgentStrategy
+from ai_algorithms.environment.agent_strategies.agent_strategy import AgentStrategy
 
 
 class RandomAction(AgentStrategy):
