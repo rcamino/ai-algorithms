@@ -14,5 +14,5 @@ class UCS(Strategy):
 ucs_strategy = UCS()
 
 
-def ucs_search(search_problem):
-    return graph_search(search_problem, ucs_strategy)
+def ucs_search(model):
+    return graph_search(model, ucs_strategy)

@@ -15,5 +15,5 @@ class BFS(Strategy):
 bfs_strategy = BFS()
 
 
-def bfs_search(search_problem):
-    return graph_search(search_problem, bfs_strategy)
+def bfs_search(model):
+    return graph_search(model, bfs_strategy)

@@ -5,16 +5,16 @@ from search.strategy import Strategy
 
 class AStar(Strategy):
 
-    def __init__(self, search_problem, heuristic):
-        self.search_problem = search_problem
+    def __init__(self, model, heuristic):
+        self.model = model
         self.heuristic = heuristic
 
     def create_candidates(self):
         return CandidatePriorityQueue()
 
     def add_to_candidates(self, node, candidates):
-        candidates.add_candidate(node, node.cost + self.heuristic(self.search_problem, node.state))
+        candidates.add_candidate(node, node.cost + self.heuristic(self.model, node.state))
 
 
-def a_star_search(search_problem, heuristic):
-    return graph_search(search_problem, AStar(search_problem, heuristic))
+def a_star_search(model, heuristic):
+    return graph_search(model, AStar(model, heuristic))

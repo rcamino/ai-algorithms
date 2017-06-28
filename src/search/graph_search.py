@@ -18,18 +18,20 @@ def reconstruct_path(last_node):
     return actions
 
 
-def graph_search(problem, strategy):
+def graph_search(model, strategy):
     closed = set()
     candidates = strategy.create_candidates()
-    start_node = Node(state=problem.start_state(), action=None, previous=None, cost=0)
+    start_node = Node(state=model.start_state(), action=None, previous=None, cost=0)
     strategy.add_to_candidates(start_node, candidates)
     while candidates.has_candidates():
         node = candidates.next_candidate()
-        if problem.is_goal_state(node.state):
+        if model.is_goal_state(node.state):
             return reconstruct_path(node)
         if node.state not in closed:
             closed.add(node.state)
-            for action, child_state, cost in problem.transitions(node.state):
-                child_node = Node(state=child_state, action=action, previous=node, cost=node.cost + cost)
+            for action in model.actions_from(node.state):
+                child_state = model.next_state(node.state, action)
+                cost = node.cost + model.cost(node.state, action, child_state)
+                child_node = Node(state=child_state, action=action, previous=node, cost=cost)
                 strategy.add_to_candidates(child_node, candidates)
     return None

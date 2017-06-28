@@ -15,5 +15,5 @@ class DFS(Strategy):
 dfs_strategy = DFS()
 
 
-def dfs_search(search_problem):
-    return graph_search(search_problem, dfs_strategy)
+def dfs_search(model):
+    return graph_search(model, dfs_strategy)
