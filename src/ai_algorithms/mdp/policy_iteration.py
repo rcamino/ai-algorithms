@@ -5,7 +5,7 @@ from value_iteration import create_initial_values
 
 def create_random_policy(model, random_state=None):
     if random_state is None:
-        random_state = random.getstate()
+        random_state = random.Random()
     random_policy = {}
     for state in model.states():
         actions = model.actions_from(state)
