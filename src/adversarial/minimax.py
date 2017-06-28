@@ -1,4 +1,4 @@
-from environment.strategy import AgentStrategy
+from environment.agent_strategies.agent_strategy import AgentStrategy
 
 
 class Minimax(AgentStrategy):
