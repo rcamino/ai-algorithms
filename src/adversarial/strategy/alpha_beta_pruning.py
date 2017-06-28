@@ -3,8 +3,8 @@ from adversarial.strategy import AgentStrategy
 
 class AlphaBetaPruning(AgentStrategy):
 
-    def __init__(self, evaluator, depth):
-        self.evaluator = evaluator
+    def __init__(self, state_evaluator, depth):
+        self.state_evaluator = state_evaluator
         self.depth = depth
 
     def next_action(self, state, agent):
@@ -14,7 +14,7 @@ class AlphaBetaPruning(AgentStrategy):
 
     def next_transition(self, state, depth, agents, agent_index, alpha, beta):
         if depth == 0 or agent_index < len(agents) and len(agents[agent_index].actions(state)) == 0:
-            return self.evaluator.evaluate(state), None
+            return self.state_evaluator.evaluate(state), None
         else:
             if agent_index == 0:
                 return self.max_value_transition(state, depth, agents, alpha, beta)
