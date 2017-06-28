@@ -1,55 +1,56 @@
-def create_empty_q_value(model):
-    q_0 = {}
-    for s in model.states():
-        q_0[s] = {}
-        for a in model.actions_from(s):
-            q_0[s][a] = 0
-    return q_0
+def create_initial_q_values(model):
+    initial_q_values = {}
+    for state in model.states():
+        initial_q_values[state] = {}
+        for action in model.actions_from(state):
+            initial_q_values[state][action] = 0
+    return initial_q_values
 
 
-def q_value_iteration_step(model, q_k, discount=1.0):
-    q_k_plus_1 = create_empty_q_value(model)
-    for s1 in model.states():
-        for a in model.actions_from(s1):
-            q = 0.0
-            for s2 in model.states_from(s1, a):
-                max_a = 0
-                for a2 in model.actions_from(s2):
-                    max_a = max(max_a, q_k[s2][a2])
-                q += model.probability(s1, a, s2) * (model.reward(s1, a, s2) + discount * max_a)
-            q_k_plus_1[s1][a] = q
-    return q_k_plus_1
+def q_value_iteration_step(model, q_values, discount=1.0):
+    next_q_values = create_initial_q_values(model)
+    for state_from in model.states():
+        for action in model.actions_from(state_from):
+            q_value = 0.0
+            for state_to in model.states_from(state_from, action):
+                max_q_value = 0
+                for second_action in model.actions_from(state_to):
+                    max_q_value = max(max_q_value, q_values[state_to][second_action])
+                q_value += model.probability(state_from, action, state_to) \
+                           * (model.reward(state_from, action, state_to) + discount * max_q_value)
+            next_q_values[state_from][action] = q_value
+    return next_q_values
 
 
-def q_value_iteration(model, q_0=None, discount=1.0, iterations=1000, tolerance=1e-6):
-    if q_0 is None:
-        q_k = create_empty_q_value(model)
+def q_value_iteration(model, initial_q_values=None, discount=1.0, iterations=1000, tolerance=1e-6):
+    if initial_q_values is None:
+        q_values = create_initial_q_values(model)
     else:
-        q_k = q_0
-    i = 0
-    while i < iterations:
-        q_k_plus_1 = q_value_iteration_step(model, q_k, discount)
+        q_values = initial_q_values
+    iteration = 0
+    while iteration < iterations:
+        next_q_values = q_value_iteration_step(model, q_values, discount)
         max_change = 0
-        for s in q_k.keys():
-            for a in q_k[s].keys():
-                max_change = max(max_change, abs(q_k_plus_1[s][a] - q_k[s][a]))
+        for state in q_values.keys():
+            for action in q_values[state].keys():
+                max_change = max(max_change, abs(next_q_values[state][action] - q_values[state][action]))
         if max_change < tolerance:
             break
-        q_k = q_k_plus_1
-        i += 1
-    return q_k
+        q_values = next_q_values
+        iteration += 1
+    return q_values
 
 
 def policy_from_q_values(model, q_values):
-    pi = {}
-    for s in model.states():
+    policy = {}
+    for state in model.states():
         max_q_value = 0.0
         max_action = None
-        for a in model.actions_from(s):
-            q_value = q_values[s][a]
+        for action in model.actions_from(state):
+            q_value = q_values[state][action]
             if max_action is None or q_value > max_q_value:
-                max_action = a
+                max_action = action
                 max_q_value = q_value
         if max_action is not None:
-            pi[s] = max_action
-    return pi
+            policy[state] = max_action
+    return policy
