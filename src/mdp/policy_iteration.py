@@ -1,6 +1,6 @@
 import random
 
-from value_iteration import create_empty_value
+from value_iteration import create_initial_values
 
 
 def create_random_policy(model, rnd=None):
@@ -16,12 +16,12 @@ def create_random_policy(model, rnd=None):
 
 def policy_evaluation(model, pi, v_pi_0=None, discount=1.0, iterations=1000, tolerance=1e-6):
     if v_pi_0 is None:
-        v_pi_k = create_empty_value(model)
+        v_pi_k = create_initial_values(model)
     else:
         v_pi_k = v_pi_0
     i = 0
     while i < iterations:
-        v_pi_k_plus_1 = create_empty_value(model)
+        v_pi_k_plus_1 = create_initial_values(model)
         for s1 in pi.keys():
             a = pi[s1]
             v = 0
