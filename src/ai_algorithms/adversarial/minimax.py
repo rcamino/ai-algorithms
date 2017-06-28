@@ -14,11 +14,11 @@ class Minimax(AgentStrategy):
 
     def next_transition(self, state, depth, agents, agent_index):
         if depth == 0 or agent_index < len(agents) and len(agents[agent_index].actions(state)) == 0:
-            return self.state_evaluator.evaluate(state), None
+            return self.state_evaluator.evaluate(state, agents[0]), None
         else:
             if agent_index == 0:
                 return self.max_value_transition(state, depth, agents)
-            elif agent_index < state.agent_count():
+            elif agent_index < len(agents):
                 return self.min_value_transition(state, depth, agents, agent_index)
             else:
                 return self.next_transition(state, depth - 1, agents, 0)
