@@ -1,28 +1,47 @@
 import random
 
 from ai_algorithms.environment.agent_strategies.random_action import RandomAction
+from ai_algorithms.environment.episode import run_episode, Episode
 
-from tic_tac_toe import TicTacToeEvaluator, TicTacToeAgent, TicTacToe, print_board
+from tic_tac_toe import TicTacToeAgent, TicTacToe
+
+
+class TicTacToeVerboseEpisode(Episode):
+
+    def started(self, environment, state):
+        print "game started"
+        environment.print_state(state)
+
+    def agent_chosen(self, environment, state, agent):
+        print agent.name, "turn"
+
+    def action_chosen(self, environment, state, agent, action):
+        print agent.name, "plays", action
+
+    def state_changed(self, environment, state, agent, action, new_state):
+        environment.print_state(new_state)
+
+    def finished(self, environment, state):
+        print "game finished"
+        if state.winner is None:
+            print "Tie!"
+        else:
+            print state.winner, "wins the game!"
+
+
+def main():
+    board_size = 3
+
+    random_state = random.Random()
+
+    player_o = TicTacToeAgent("O", board_size, RandomAction(random_state))
+    player_x = TicTacToeAgent("X", board_size, RandomAction(random_state))
+
+    environment = TicTacToe(player_o, player_x, board_size)
+    episode = TicTacToeVerboseEpisode()
+
+    run_episode(environment, episode)
 
 
 if __name__ == "__main__":
-    BOARD_SIZE = 3
-
-    random_state = random.Random()
-    evaluator = TicTacToeEvaluator()
-
-    player_O = TicTacToeAgent("O", RandomAction(random_state))
-    player_X = TicTacToeAgent("X", RandomAction(random_state))
-
-    game = TicTacToe(player_O, player_X, BOARD_SIZE)
-    while game.winner is None and len(game.available_positions()) > 0:
-        action = game.current_player.next_action(game)
-        print game.current_player, "plays", action
-        game = game.next_state(game.current_player, action)
-        print_board(game.board, BOARD_SIZE)
-        print
-
-    if game.winner is None:
-        print "Tie!"
-    else:
-        print game.winner, "wins the game!"
+    main()
