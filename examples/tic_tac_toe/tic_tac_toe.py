@@ -131,9 +131,9 @@ class TicTacToe(Environment, UniformActions):
     def is_goal_state(self, state):
         return (state.winner is not None) or state.moves == self.board_size * self.board_size
 
-    def actions(self, state, agent):
+    def actions_from(self, state):
         result = []
-        if state.player == agent.name:
+        if not self.is_goal_state(state):
             for i in xrange(self.board_size):
                 for j in xrange(self.board_size):
                     if state.board[i][j] is None:

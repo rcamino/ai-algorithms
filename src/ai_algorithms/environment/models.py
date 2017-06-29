@@ -3,9 +3,6 @@ from ai_algorithms.model import Model
 
 class Environment(Model):
 
-    def actions_from(self, state):
-        return self.actions(state, self.next_agent(state))
-
     def agents(self, state):
         """
         Returns available agents in the given state.

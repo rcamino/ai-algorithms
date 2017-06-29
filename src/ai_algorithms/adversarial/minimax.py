@@ -21,7 +21,7 @@ class Minimax(AgentStrategy):
         return action
 
     def next_transition(self, environment, state, depth, agents, agent_index):
-        if depth == 0 or agent_index < len(agents) and len(environment.actions(state, agents[agent_index])) == 0:
+        if depth == 0 or len(environment.actions_from(state)) == 0:
             return environment.evaluate(state, agents[0]), None
         else:
             if agent_index == 0:
@@ -35,7 +35,7 @@ class Minimax(AgentStrategy):
         agent = agents[0]
         max_value = -float("inf")
         max_action = None
-        for action in environment.actions(state, agent):
+        for action in environment.actions_from(state):
             next_state = environment.react(state, agent, action)
             value, _ = self.next_transition(environment, next_state, depth, agents, 1)
             if max_action is None or value > max_value:
@@ -47,7 +47,7 @@ class Minimax(AgentStrategy):
         agent = agents[agent_index]
         min_value = float("inf")
         min_action = None
-        for action in environment.actions(state, agent):
+        for action in environment.actions_from(state):
             next_state = environment.react(state, agent, action)
             value, _ = self.next_transition(environment, next_state, depth, agents, agent_index + 1)
             if min_action is None or value < min_value:
