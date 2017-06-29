@@ -1,6 +1,6 @@
+from ai_algorithms.search.candidates.priority_queue import CandidatePriorityQueue
 from ai_algorithms.search.graph_search import graph_search
-from search.candidates.priority_queue import CandidatePriorityQueue
-from search.strategy import Strategy
+from ai_algorithms.search.strategy import Strategy
 
 
 class AStar(Strategy):

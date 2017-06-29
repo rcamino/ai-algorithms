@@ -19,4 +19,4 @@ class CandidatePriorityQueue(Candidates):
     def add_candidate(self, candidate, cost):
         order = self.count
         self.count += 1
-        heapq.heappush((cost, order, candidate))
+        heapq.heappush(self.candidates, (cost, order, candidate))
