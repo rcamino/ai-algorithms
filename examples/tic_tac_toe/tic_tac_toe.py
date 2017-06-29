@@ -2,15 +2,14 @@ import time
 
 from collections import namedtuple
 
-from ai_algorithms.environment.episode import Episode, run_episode
+from ai_algorithms.environment.episode import run_episode
 from ai_algorithms.environment.models import Environment, UniformActions
 from ai_algorithms.environment.agent import Agent
-from ai_algorithms.model import Model
 
 State = namedtuple("State", ["board", "player", "winner", "moves"])
 
 
-class TicTacToe(Model, Environment, UniformActions):
+class TicTacToe(Environment, UniformActions):
     LENGTH = 3
 
     def __init__(self, player_1, player_2, board_size):
@@ -120,9 +119,6 @@ class TicTacToe(Model, Environment, UniformActions):
 
         return False
 
-    def actions_from(self, state):
-        raise Exception("Not needed.")
-
     def start_state(self):
         board = []
         for i in xrange(self.board_size):
@@ -135,25 +131,24 @@ class TicTacToe(Model, Environment, UniformActions):
     def is_goal_state(self, state):
         return (state.winner is not None) or state.moves == self.board_size * self.board_size
 
-
-class TicTacToeAgent(Agent):
-
-    def __init__(self, name, board_size, *args, **kwargs):
-        super(TicTacToeAgent, self).__init__(*args, **kwargs)
-        self.name = name
-        self.board_size = board_size
-
-    def __repr__(self):
-        return str(self.name)[0]
-
-    def actions(self, state):
+    def actions(self, state, agent):
         result = []
-        if state.player == self.name:
+        if state.player == agent.name:
             for i in xrange(self.board_size):
                 for j in xrange(self.board_size):
                     if state.board[i][j] is None:
                         result.append((i, j))
         return result
+
+
+class TicTacToeAgent(Agent):
+
+    def __init__(self, name, *args, **kwargs):
+        super(TicTacToeAgent, self).__init__(*args, **kwargs)
+        self.name = name
+
+    def __repr__(self):
+        return str(self.name)[0]
 
 
 def run_timed_episodes(environment, episodes):

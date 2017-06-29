@@ -8,8 +8,8 @@ def main():
     board_size = 4
     episodes = 10
 
-    player_o = TicTacToeAgent("O", board_size, Minimax(2))
-    player_x = TicTacToeAgent("X", board_size, AlphaBetaPruning(3))
+    player_o = TicTacToeAgent("O", Minimax(2))
+    player_x = TicTacToeAgent("X", AlphaBetaPruning(3))
 
     environment = TicTacToe(player_o, player_x, board_size)
 

@@ -15,11 +15,3 @@ class Agent(object):
         :return: chosen action; must be a hashable object
         """
         return self.strategy.next_action(environment, state, self)
-
-    def actions(self, state):
-        """
-        Possible actions for the agent in the given state.
-        :param state: current state; must be a hashable object
-        :return: list of actions; they can be strings or any other objects
-        """
-        raise NotImplementedError

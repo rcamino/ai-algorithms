@@ -34,8 +34,8 @@ def main():
 
     random_state = random.Random()
 
-    player_o = TicTacToeAgent("O", board_size, RandomAction(random_state))
-    player_x = TicTacToeAgent("X", board_size, RandomAction(random_state))
+    player_o = TicTacToeAgent("O", RandomAction(random_state))
+    player_x = TicTacToeAgent("X", RandomAction(random_state))
 
     environment = TicTacToe(player_o, player_x, board_size)
     episode = TicTacToeVerboseEpisode()

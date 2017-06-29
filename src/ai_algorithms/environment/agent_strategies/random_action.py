@@ -21,4 +21,4 @@ class RandomAction(AgentStrategy):
         :param agent: must implement ai_algorithms.environment.agent.Agent
         :return: chosen action; must be a hashable object
         """
-        return self.random_state.choice(agent.actions(state))
+        return self.random_state.choice(environment.actions(state, agent))

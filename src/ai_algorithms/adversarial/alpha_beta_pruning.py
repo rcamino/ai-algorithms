@@ -21,7 +21,7 @@ class AlphaBetaPruning(AgentStrategy):
         return action
 
     def next_transition(self, environment, state, depth, agents, agent_index, alpha, beta):
-        if depth == 0 or agent_index < len(agents) and len(agents[agent_index].actions(state)) == 0:
+        if depth == 0 or agent_index < len(agents) and len(environment.actions(state, agents[agent_index])) == 0:
             return environment.evaluate(state, agents[0]), None
         else:
             if agent_index == 0:
@@ -35,7 +35,7 @@ class AlphaBetaPruning(AgentStrategy):
         agent = agents[0]
         max_value = -float("inf")
         max_action = None
-        for action in agent.actions(state):
+        for action in environment.actions(state, agent):
             next_state = environment.react(state, agent, action)
             value, _ = self.next_transition(environment, next_state, depth, agents, 1, alpha, beta)
             if value > beta:
@@ -50,7 +50,7 @@ class AlphaBetaPruning(AgentStrategy):
         agent = agents[agent_index]
         min_value = float("inf")
         min_action = None
-        for action in agent.actions(state):
+        for action in environment.actions(state, agent):
             next_state = environment.react(state, agent, action)
             value, _ = self.next_transition(environment, next_state, depth, agents, agent_index + 1, alpha, beta)
             if value < alpha:
