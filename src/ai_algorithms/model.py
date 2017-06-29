@@ -46,6 +46,12 @@ class NoCost(CostAware):
         return 0
 
 
+class UniformCost(CostAware):
+
+    def cost(self, state_from, action, state_to):
+        return 1
+
+
 class RewardAware(object):
 
     def reward(self, state_from, action, state_to):
