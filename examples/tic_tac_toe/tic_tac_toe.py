@@ -1,6 +1,6 @@
 from ai_algorithms.environment.environment import Environment
 from ai_algorithms.environment.agent import Agent
-from ai_algorithms.environment.environment_evaluator import EnvironmentEvaluator
+from ai_algorithms.environment.state_evaluator import StateEvaluator
 
 
 def create_empty_board(board_size):
@@ -140,7 +140,7 @@ class TicTacToeAgent(Agent):
         return state.available_positions()
 
 
-class TicTacToeEvaluator(EnvironmentEvaluator):
+class TicTacToeEvaluator(StateEvaluator):
 
     def evaluate(self, state, agent):
         if state.winner is None:

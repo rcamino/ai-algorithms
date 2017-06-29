@@ -3,18 +3,27 @@ from ai_algorithms.environment.agent_strategies.agent_strategy import AgentStrat
 
 class Minimax(AgentStrategy):
 
-    def __init__(self, state_evaluator, depth):
-        self.state_evaluator = state_evaluator
+    def __init__(self, environment, depth):
+        """
+        :param model: must implement ai_algorithms.environment.environment.Environment
+        :param depth: int >= 0 indicating the maximum amount of node levels to explore
+        """
+        self.environment = environment
         self.depth = depth
 
     def next_action(self, state, agent):
-        agents = [agent] + [other_agent for other_agent in sorted(state.agents()) if agent != other_agent]
+        """
+        :param state: current state; must be a hashable object
+        :param agent: must implement ai_algorithms.environment.agent.Agent
+        :return: chosen action; must be a hashable object
+        """
+        agents = [agent] + [other_agent for other_agent in sorted(self.environment.agents()) if agent != other_agent]
         _, action = self.next_transition(state, self.depth, agents, 0)
         return action
 
     def next_transition(self, state, depth, agents, agent_index):
         if depth == 0 or agent_index < len(agents) and len(agents[agent_index].actions(state)) == 0:
-            return self.state_evaluator.evaluate(state, agents[0]), None
+            return self.environment.evaluate(state, agents[0]), None
         else:
             if agent_index == 0:
                 return self.max_value_transition(state, depth, agents)
@@ -28,7 +37,7 @@ class Minimax(AgentStrategy):
         max_value = -float("inf")
         max_action = None
         for action in agent.actions(state):
-            next_state = state.react(agent, action)
+            next_state = self.environment.react(state, agent, action)
             value, _ = self.next_transition(next_state, depth, agents, 1)
             if max_action is None or value > max_value:
                 max_value = value
@@ -40,7 +49,7 @@ class Minimax(AgentStrategy):
         min_value = float("inf")
         min_action = None
         for action in agent.actions(state):
-            next_state = state.react(agent, action)
+            next_state = self.environment.react(state, agent, action)
             value, _ = self.next_transition(next_state, depth, agents, agent_index + 1)
             if min_action is None or value < min_value:
                 min_value = value

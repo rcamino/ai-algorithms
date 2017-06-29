@@ -13,11 +13,11 @@ class RandomAction(AgentStrategy):
             random_state = random.Random()
         self.random_state = random_state
 
-    def next_action(self, environment, agent):
+    def next_action(self, state, agent):
         """
-        Takes the next action for the agent at random from the possible actions in the environment.
-        :param environment: must implement ai_algorithms.environment.environment.Environment
+        Takes the next action for the agent at random from the possible actions in the given state.
+        :param state: current state; must be a hashable object
         :param agent: must implement ai_algorithms.environment.agent.Agent
-        :return: chosen action; can be a string or any other object
+        :return: chosen action; must be a hashable object
         """
-        return self.random_state.choice(agent.actions(environment))
+        return self.random_state.choice(agent.actions(state))
