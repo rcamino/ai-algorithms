@@ -4,6 +4,12 @@ from value_iteration import create_initial_values
 
 
 def create_random_policy(model, random_state=None):
+    """
+    Creates a policy choosing valid actions at random for every state
+    :param model: must implement ai_algorithms.model.{Model,CompleteSpace,Stochastic,RewardAware}
+    :param random_state: random.RandomState; if None, default random state will be used
+    :return: dictionary of state to action
+    """
     if random_state is None:
         random_state = random.Random()
     random_policy = {}
@@ -15,6 +21,16 @@ def create_random_policy(model, random_state=None):
 
 
 def policy_evaluation(model, policy, initial_values=None, discount=1.0, iterations=1000, tolerance=1e-6):
+    """
+    Calculates the optimum value reward that can be obtained following the policy.
+    :param model: must implement ai_algorithms.model.{Model,CompleteSpace,Stochastic,RewardAware}
+    :param policy: the policy to follow; a dictionary from states to actions
+    :param initial_values: initial estimation of the result
+    :param discount: factor in [0, 1] to indicate how much of the value should be retained between iterations
+    :param iterations: maximum number of iterations
+    :param tolerance: if the maximum difference between all the values is less than this number algorithm stops
+    :return: dictionary of values for every state
+    """
     if initial_values is None:
         values = create_initial_values(model)
     else:
@@ -40,6 +56,13 @@ def policy_evaluation(model, policy, initial_values=None, discount=1.0, iteratio
 
 
 def policy_improvement(model, values, discount=1.0):
+    """
+    Finds the best policy given the fixed optimum values from every state.
+    :param model: must implement ai_algorithms.model.{Model,CompleteSpace,Stochastic,RewardAware}
+    :param values: optimum value reward that can be obtained from every state calculated in a previous step
+    :param discount: factor in [0, 1] to indicate how much of the fixed values should be retained
+    :return: dictionary of state to action
+    """
     next_policy = {}
     for state_from in model.states():
         max_action = None
@@ -58,6 +81,15 @@ def policy_improvement(model, values, discount=1.0):
 
 
 def policy_iteration(model, initial_policy=None, discount=1.0, iterations=1000, tolerance=1e-6):
+    """
+    Returns the action that must be taken from every state to obtain the optimum reward.
+    :param model: must implement ai_algorithms.model.{Model,CompleteSpace,Stochastic,RewardAware}
+    :param initial_policy: initial estimation of the result
+    :param discount: factor in [0, 1] to indicate how much of the value should be retained between iterations
+    :param iterations: maximum number of iterations
+    :param tolerance: if the maximum difference between all the values is less than this number algorithm stops
+    :return: dictionary of state to action
+    """
     if initial_policy is None:
         policy = create_random_policy(model)
     else:
