@@ -5,6 +5,11 @@ Node = namedtuple("Node", ["state", "action", "previous", "cost"])
 
 
 def reconstruct_path(last_node):
+    """
+    Build a sequence of actions going backwards to the start state from a given state.
+    :param last_node: last visited state node
+    :return: action list
+    """
     action = last_node.action
     node = last_node.previous
     action_stack = deque()
@@ -19,6 +24,12 @@ def reconstruct_path(last_node):
 
 
 def graph_search(model, strategy):
+    """
+    Finds in a graph the path of actions between the starting state and a goal using the lowest accumulated cost.
+    :param model: must implement ai_algorithms.model.{Model,Deterministic,CostAware}
+    :param strategy: must implement ai_algorithms.search.strategy.Strategy
+    :return: action sequence or None if the problem cannot be solved
+    """
     closed = set()
     candidates = strategy.create_candidates()
     start_node = Node(state=model.start_state(), action=None, previous=None, cost=0)
