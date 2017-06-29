@@ -14,7 +14,7 @@ class Environment(object):
         :param state: current state; must be a hashable object
         :param agent: must implement ai_algorithms.environment.agent.Agent
         :param action: action from the agent possible actions in the state; must be a hashable object
-        :return: ai_algorithms.environment.environment.Environment
+        :return: new state; must be a hashable object
         """
         raise NotImplementedError
 
@@ -22,7 +22,7 @@ class Environment(object):
         """
         Returns the next agent that has to chose an action in the given state.
         :param state: current state; must be a hashable object
-        :return: ai_algorithms.environment.agent.Agent or None if the simulation has to end
+        :return: ai_algorithms.environment.agent.Agent
         """
         raise NotImplementedError
 
@@ -34,3 +34,31 @@ class Environment(object):
         :return: float or int
         """
         raise NotImplementedError
+
+
+class AgentEstimator(object):
+
+    def agent_action_probability(self, state, agent, actions, action):
+        """
+        Gives an estimation for the probability of an agent taking an action from the possible actions in a state.
+        :param state: current state; must be a hashable object
+        :param agent: must implement ai_algorithms.environment.agent.Agent
+        :param actions: possible action list
+        :param action: chosen action from the list; must be a hashable object
+        :return: float in [0, 1]
+        """
+        raise NotImplementedError
+
+
+class UniformActions(AgentEstimator):
+
+    def agent_action_probability(self, state, agent, actions, action):
+        """
+        Gives the same probability to every possible action of an agent in a state.
+        :param state: current state; must be a hashable object
+        :param agent: must implement ai_algorithms.environment.agent.Agent
+        :param actions: possible action list
+        :param action: chosen action from the list; must be a hashable object
+        :return: float in [0, 1]
+        """
+        return 1.0 / len(actions)
