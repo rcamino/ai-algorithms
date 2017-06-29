@@ -28,7 +28,7 @@ class Minimax(AgentStrategy):
         max_value = -float("inf")
         max_action = None
         for action in agent.actions(state):
-            next_state = state.next_state(agent, action)
+            next_state = state.react(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, 1)
             if max_action is None or value > max_value:
                 max_value = value
@@ -40,7 +40,7 @@ class Minimax(AgentStrategy):
         min_value = float("inf")
         min_action = None
         for action in agent.actions(state):
-            next_state = state.next_state(agent, action)
+            next_state = state.react(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, agent_index + 1)
             if min_action is None or value < min_value:
                 min_value = value

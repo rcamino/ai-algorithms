@@ -6,19 +6,19 @@ class Agent(object):
         """
         self.strategy = strategy
 
-    def next_action(self, state):
+    def next_action(self, environment):
         """
-        Decides the next action to chose from the possible actions in the state.
+        Decides the next action to chose from the possible actions in the environment.
         This is delegated to the strategy.
-        :param state: must implement ai_algorithms.environment.state.State
+        :param environment: must implement ai_algorithms.environment.environment.Environment
         :return: chosen action; can be a string or any other object
         """
-        return self.strategy.next_action(state, self)
+        return self.strategy.next_action(environment, self)
 
-    def actions(self, state):
+    def actions(self, environment):
         """
-        Possible actions for the agent in the state.
-        :param state: must implement ai_algorithms.environment.state.State
+        Possible actions for the agent in the environment.
+        :param environment: must implement ai_algorithms.environment.environment.Environment
         :return: list of actions; they can be strings or any other objects
         """
         raise NotImplementedError

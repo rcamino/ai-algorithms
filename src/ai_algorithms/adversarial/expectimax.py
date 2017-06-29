@@ -33,7 +33,7 @@ class Expectimax(AgentStrategy):
         max_value = -float("inf")
         max_action = None
         for action in agent.actions(state):
-            next_state = state.next_state(agent, action)
+            next_state = state.react(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, 1)
             if max_action is None or value > max_value:
                 max_value = value
@@ -45,7 +45,7 @@ class Expectimax(AgentStrategy):
         result = 0.0
         actions = agent.actions(state)
         for action in actions:
-            next_state = state.next_state(agent, action)
+            next_state = state.react(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, agent_index + 1)
             result += value * self.agent_estimator.agent_action_probability(state, agent, actions, action)
         return result

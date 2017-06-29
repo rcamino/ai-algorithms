@@ -37,7 +37,7 @@ def create_random_board(board_size, problem):
     for _ in xrange(moves):
         actions = problem.actions_from(board)
         action = random.choice(actions)
-        board = problem.next_state(board, action)
+        board = problem.react(board, action)
     return board
 
 

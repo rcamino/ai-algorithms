@@ -28,7 +28,7 @@ class AlphaBetaPruning(AgentStrategy):
         max_value = -float("inf")
         max_action = None
         for action in agent.actions(state):
-            next_state = state.next_state(agent, action)
+            next_state = state.react(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, 1, alpha, beta)
             if value > beta:
                 return value, action
@@ -43,7 +43,7 @@ class AlphaBetaPruning(AgentStrategy):
         min_value = float("inf")
         min_action = None
         for action in agent.actions(state):
-            next_state = state.next_state(agent, action)
+            next_state = state.react(agent, action)
             value, _ = self.next_transition(next_state, depth, agents, agent_index + 1, alpha, beta)
             if value < alpha:
                 return value, action

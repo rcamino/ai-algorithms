@@ -1,6 +1,6 @@
-from ai_algorithms.environment.state import State
+from ai_algorithms.environment.environment import Environment
 from ai_algorithms.environment.agent import Agent
-from ai_algorithms.environment.state_evaluator import StateEvaluator
+from ai_algorithms.environment.environment_evaluator import EnvironmentEvaluator
 
 
 def create_empty_board(board_size):
@@ -73,7 +73,7 @@ def check_winning_move(board, board_size, player, move, length=3):
     return False
 
 
-class TicTacToe(State):
+class TicTacToe(Environment):
 
     def __init__(self, player_1, player_2, board_size, board=None, current_player=None, winner=None):
         self.player_1 = player_1
@@ -102,7 +102,7 @@ class TicTacToe(State):
     def agents(self):
         return [self.player_1, self.player_2]
 
-    def next_state(self, agent, action):
+    def react(self, agent, action):
         if agent != self.current_player:
             raise Exception("Invalid agent turn.")
 
@@ -140,7 +140,7 @@ class TicTacToeAgent(Agent):
         return state.available_positions()
 
 
-class TicTacToeEvaluator(StateEvaluator):
+class TicTacToeEvaluator(EnvironmentEvaluator):
 
     def evaluate(self, state, agent):
         if state.winner is None:
