@@ -9,9 +9,10 @@ class FollowPolicy(AgentStrategy):
         """
         self.policy = policy
 
-    def next_action(self, state, agent):
+    def next_action(self, environment, state, agent):
         """
         Takes the next action for the agent according to a policy given the current state.
+        :param environment: must implement ai_algorithms.environment.models.Environment
         :param state: current state; must be a hashable object
         :param agent: must implement ai_algorithms.environment.agent.Agent
         :return: chosen action; must be a hashable object

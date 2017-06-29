@@ -1,4 +1,7 @@
-def run_episode(environment, episode):
+def run_episode(environment, episode=None):
+    if episode is None:
+        episode = Episode()
+
     state = environment.start_state()
     episode.started(environment, state)
 
@@ -6,7 +9,7 @@ def run_episode(environment, episode):
         agent = environment.next_agent(state)
         episode.agent_chosen(environment, state, agent)
 
-        action = agent.next_action(state)
+        action = agent.next_action(environment, state)
         episode.action_chosen(environment, state, agent, action)
 
         new_state = environment.react(state, agent, action)
@@ -15,20 +18,22 @@ def run_episode(environment, episode):
 
     episode.finished(environment, state)
 
+    return state
+
 
 class Episode(object):
 
     def started(self, environment, state):
-        raise NotImplementedError
+        pass
 
     def agent_chosen(self, environment, state, agent):
-        raise NotImplementedError
+        pass
 
     def action_chosen(self, environment, state, agent, action):
-        raise NotImplementedError
+        pass
 
     def state_changed(self, environment, state, agent, action, new_state):
-        raise NotImplementedError
+        pass
 
     def finished(self, environment, state):
-        raise NotImplementedError
+        pass

@@ -6,14 +6,15 @@ class Agent(object):
         """
         self.strategy = strategy
 
-    def next_action(self, state):
+    def next_action(self, environment, state):
         """
         Decides the next action to chose from the possible actions in the given state.
         This is delegated to the strategy.
+        :param environment: must implement ai_algorithms.environment.models.Environment
         :param state: current state; must be a hashable object
         :return: chosen action; must be a hashable object
         """
-        return self.strategy.next_action(state, self)
+        return self.strategy.next_action(environment, state, self)
 
     def actions(self, state):
         """
