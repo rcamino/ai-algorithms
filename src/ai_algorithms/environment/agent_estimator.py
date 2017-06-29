@@ -7,4 +7,4 @@ class AgentEstimator(object):
 class UniformActions(AgentEstimator):
 
     def agent_action_probability(self, state, agent, actions, action):
-        return 1.0 / len(action)
+        return 1.0 / len(actions)
