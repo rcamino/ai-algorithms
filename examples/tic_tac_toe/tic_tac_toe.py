@@ -5,11 +5,13 @@ from collections import namedtuple
 from ai_algorithms.environment.episode import run_episode
 from ai_algorithms.environment.models import Environment, UniformActions
 from ai_algorithms.environment.agent import Agent
+from ai_algorithms.model import RewardAware
+from ai_algorithms.reinforcement.learning_agent import LearningAgent
 
 State = namedtuple("State", ["board", "player", "winner", "moves"])
 
 
-class TicTacToe(Environment, UniformActions):
+class TicTacToe(Environment, UniformActions, RewardAware):
     LENGTH = 3
 
     def __init__(self, player_1, player_2, board_size):
@@ -140,8 +142,15 @@ class TicTacToe(Environment, UniformActions):
                         result.append((i, j))
         return result
 
+    def reward(self, state_from, action, state_to):
+        if state_to.player == self.player_1.name:
+            agent = self.player_1
+        else:
+            agent = self.player_2
+        return self.evaluate(state_to, agent) - self.evaluate(state_from, agent)
 
-class TicTacToeAgent(Agent):
+
+class TicTacToeAgent(LearningAgent):
 
     def __init__(self, name, *args, **kwargs):
         super(TicTacToeAgent, self).__init__(*args, **kwargs)
