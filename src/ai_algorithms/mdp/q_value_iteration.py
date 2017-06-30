@@ -62,18 +62,17 @@ def q_value_iteration(model, initial_q_values=None, discount=1.0, iterations=100
     return q_values
 
 
-def policy_from_q_values(model, q_values):
+def policy_from_q_values(q_values):
     """
     Calculates the optimal policy from q-values.
-    :param model: must implement ai_algorithms.model.{Model,CompleteSpace,Stochastic,RewardAware}
     :param q_values: the optimum reward value that can be obtained from every state and action pair
     :return: dictionary of state to action
     """
     policy = {}
-    for state in model.states():
+    for state in q_values.keys():
         max_q_value = 0.0
         max_action = None
-        for action in model.actions_from(state):
+        for action in q_values[state].keys():
             q_value = q_values[state][action]
             if max_action is None or q_value > max_q_value:
                 max_action = action
