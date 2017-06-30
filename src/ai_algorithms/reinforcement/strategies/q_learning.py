@@ -8,7 +8,7 @@ class QLearning(LearningAgentStrategy):
     def __init__(self, learning_rate, discount):
         self.learning_rate = learning_rate
         self.discount = discount
-        self.q_values = defaultdict(lambda: defaultdict(lambda: 0))
+        self.q_values = defaultdict(lambda: defaultdict(lambda: 0.0))
 
     def next_action_and_q_value(self, environment, state):
         max_q_value = 0.0
