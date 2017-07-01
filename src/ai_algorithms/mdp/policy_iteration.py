@@ -28,7 +28,7 @@ def policy_evaluation(model, policy, initial_values=None, discount=1.0, iteratio
     :param initial_values: initial estimation of the result
     :param discount: factor in [0, 1] to indicate how much of the value should be retained between iterations
     :param iterations: maximum number of iterations
-    :param tolerance: if the maximum difference between all the values is less than this number algorithm stops
+    :param tolerance: if the maximum difference between all the values is less than this number the algorithm stops
     :return: dictionary of values for every state
     """
     if initial_values is None:
@@ -87,7 +87,7 @@ def policy_iteration(model, initial_policy=None, discount=1.0, iterations=1000, 
     :param initial_policy: initial estimation of the result
     :param discount: factor in [0, 1] to indicate how much of the value should be retained between iterations
     :param iterations: maximum number of iterations
-    :param tolerance: if the maximum difference between all the values is less than this number algorithm stops
+    :param tolerance: if the maximum difference between all the values is less than this number the algorithm stops
     :return: dictionary of state to action
     """
     if initial_policy is None:

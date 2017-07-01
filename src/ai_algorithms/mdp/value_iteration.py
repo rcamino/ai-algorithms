@@ -42,7 +42,7 @@ def value_iteration(model, initial_values=None, discount=1.0, iterations=1000, t
     :param initial_values: initial estimation of the result
     :param discount: factor in [0, 1] to indicate how much of the value should be retained between iterations
     :param iterations: maximum number of iterations
-    :param tolerance: if the maximum difference between all the values is less than this number algorithm stops
+    :param tolerance: if the maximum difference between all the values is less than this number the algorithm stops
     :return: dictionary of values for every state
     """
     if initial_values is None:

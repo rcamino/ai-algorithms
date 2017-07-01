@@ -41,7 +41,7 @@ def q_value_iteration(model, initial_q_values=None, discount=1.0, iterations=100
     :param initial_q_values: initial estimation of the result
     :param discount: factor in [0, 1] to indicate how much of the value should be retained between iterations
     :param iterations: maximum number of iterations
-    :param tolerance: if the maximum difference between all the values is less than this number algorithm stops
+    :param tolerance: if the maximum difference between all the values is less than this number the algorithm stops
     :return: dictionary of dictionaries of values for every state and action
     """
     if initial_q_values is None:
