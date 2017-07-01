@@ -1,6 +1,7 @@
 import random
 
 from ai_algorithms.environment.agent_strategies.random_action import RandomAction
+from ai_algorithms.probability import bernoulli_trial
 from ai_algorithms.reinforcement.learning_agent import LearningAgentStrategy
 
 
@@ -15,7 +16,7 @@ class EpsilonExploration(LearningAgentStrategy):
         self.random_action = RandomAction(random_state)
 
     def next_action(self, environment, state, agent):
-        if self.random_state.random() < self.exploration_rate:
+        if bernoulli_trial(self.exploration_rate, self.random_state):
             return self.random_action.next_action(environment, state, agent)
         else:
             return self.decorated.next_action(environment, state, agent)
