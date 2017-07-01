@@ -3,7 +3,7 @@ from ai_algorithms.probability import sample_from_distribution, samples_from_dis
 
 def transition_sample(particles, transition_probability, random_state=None):
     """
-
+    Randomly moves the particles according to transition probabilities.
     :param particles: list of states; they must be hashable objects
     :param transition_probability: dictionary of dictionaries of probabilities for states given previous states
     :param random_state: random.RandomState; if None, default random state will be used
@@ -14,7 +14,7 @@ def transition_sample(particles, transition_probability, random_state=None):
 
 def resample(particles, emission_probability, observation, random_state=None):
     """
-
+    Creates a new particles based on weights given by emission probabilities and particles per state.
     :param particles: list of states; they must be hashable objects
     :param emission_probability: dictionary of dictionaries of probabilities for observations given states
     :param observation: must be a hashable object
@@ -34,7 +34,7 @@ def resample(particles, emission_probability, observation, random_state=None):
 
 def probability_from_particles(states, particles):
     """
-
+    Calculates the probability per state given the particles.
     :param states: list of states; they must be hashable objects
     :param particles: list of states; they must be hashable objects
     :return: dictionary of probabilities for every hidden state
