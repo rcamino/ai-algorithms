@@ -1,7 +1,7 @@
 def mini_forward_step(transition_probability, previous):
     """
     Calculates the probability distribution for every state in a Markov chain given the previous state distribution.
-    :param transition_probability: dictionary of dictionaries of probabilities for states given previous states
+    :param transition_probability: probability of moving from one state to another; dictionary of dictionaries of floats
     :param previous: dictionary of probabilities for every state of the previous distribution
     :return: dictionary of probabilities for every state
     """
@@ -9,14 +9,14 @@ def mini_forward_step(transition_probability, previous):
     for x in previous.keys():
         p[x] = 0.0
         for x_previous, p_previous in previous.items():
-            p[x] += transition_probability[x][x_previous] * p_previous
+            p[x] += transition_probability[x_previous][x] * p_previous
     return p
 
 
 def mini_forward(transition_probability, prior, iterations=1000, tolerance=1e-6):
     """
     Calculates the stationary probability distribution for every state in a Markov chain.
-    :param transition_probability: dictionary of dictionaries of probabilities for states given previous states
+    :param transition_probability: probability of moving from one state to another; dictionary of dictionaries of floats
     :param prior: dictionary of probabilities for every state of the initial distribution
     :param iterations: maximum number of iterations
     :param tolerance: if the maximum difference between all the values is less than this number the algorithm stops
