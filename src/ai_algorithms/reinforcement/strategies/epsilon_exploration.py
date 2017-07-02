@@ -1,7 +1,7 @@
 import random
 
 from ai_algorithms.environment.agent_strategies.random_action import RandomAction
-from ai_algorithms.probabilities.probability import bernoulli_trial
+from ai_algorithms.probabilities.sampling import bernoulli_trial
 from ai_algorithms.reinforcement.learning_agent import LearningAgentStrategy
 
 
