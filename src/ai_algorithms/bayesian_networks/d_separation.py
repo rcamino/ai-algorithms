@@ -46,18 +46,18 @@ def arcs_to_edges(adjacency_list):
 
 
 def d_separated_triple(a, b, c, adjacency_list, conditions):
-    # causal chain a -> b -> c, c _||_ a | b
+    # causal chain: a -> b -> c and b is given => c is independent from a given b
     if b in adjacency_list[a] and c in adjacency_list[b] and b in conditions:
         return True
-    # causal chain a <- b <- c, a _||_ c | b
+    # causal chain: a <- b <- c and b is given => a is independent from c given b
     if b in adjacency_list[c] and a in adjacency_list[b] and b in conditions:
         return True
-    # common cause a <- b -> c, c _||_ a | b
+    # common cause: a <- b -> c and b is given => c is independent from a given b
     if a in adjacency_list[b] and c in adjacency_list[b] and b in conditions:
         return True
-    # common effect a -> b <- c, c _||_ a
+    # common effect: a -> b <- c
     if b in adjacency_list[a] and b in adjacency_list[c]:
-        # check if b or a node reachable from b is conditioned
+        # check if b or a node reachable from b is given
         queue = deque()
         queue.append(b)
         visited = set()
@@ -69,7 +69,7 @@ def d_separated_triple(a, b, c, adjacency_list, conditions):
                     return False
                 for neighbor in adjacency_list[node]:
                     queue.append(neighbor)
-        # if no node was found then it is d-separable
+        # b is not given and no node reachable from b is given => c is independent from a
         return True
     # no case was found so it is not d-separable
     return False
