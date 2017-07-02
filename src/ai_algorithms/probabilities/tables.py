@@ -1,8 +1,9 @@
 class Table(object):
 
-    def __init__(self, children_by_value, names):
+    def __init__(self, children_by_value, names, values_by_name):
         self.children_by_value = children_by_value
         self.names = names
+        self.values_by_name = values_by_name
 
     def __getitem__(self, value):
         return self.children_by_value[value]
@@ -47,6 +48,16 @@ def from_dictionary(probability, names):
     if len(names) == 0:
         return probability
     children_by_value = {}
-    for value in probability.keys():
-        children_by_value[value] = from_dictionary(probability[value], names[1:])
-    return Table(children_by_value, names)
+    values = probability.keys()
+    values_by_name = {names[0]: values}
+    children_have_names = len(names) > 1
+    for value in values:
+        child = from_dictionary(probability[value], names[1:])
+        children_by_value[value] = child
+        if children_have_names:
+            for child_name, child_values in child.values_by_name.items():
+                if child_name not in values_by_name:
+                    values_by_name[child_name] = child_values
+                else:
+                    assert values_by_name[child_name] == child_values
+    return Table(children_by_value, names, values_by_name)
