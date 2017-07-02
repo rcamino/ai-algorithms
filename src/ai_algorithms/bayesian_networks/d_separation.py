@@ -9,14 +9,14 @@ def in_path_node(node, path_node):
     return False
 
 
-def paths_between(node_a, node_b, adjacency_list):
+def paths_between(node_a, node_b):
     path_nodes = []
     queue = deque()
     queue.append((node_a, None))
     while len(queue) > 0:
         path_node = queue.popleft()
         node, parent_path_node = path_node
-        for neighbor in adjacency_list[node]:
+        for neighbor in node.neighbors():
             if neighbor == node_b:
                 path_nodes.append((neighbor, path_node))
             else:
@@ -45,18 +45,18 @@ def arcs_to_edges(adjacency_list):
     return new_adjacency_list
 
 
-def d_separated_triple(a, b, c, adjacency_list, conditions):
+def d_separated_triple(a, b, c, observed_nodes):
     # causal chain: a -> b -> c and b is given => c is independent from a given b
-    if b in adjacency_list[a] and c in adjacency_list[b] and b in conditions:
+    if a.is_parent_of(b) and b.is_parent_of(c) and b in observed_nodes:
         return True
     # causal chain: a <- b <- c and b is given => a is independent from c given b
-    if b in adjacency_list[c] and a in adjacency_list[b] and b in conditions:
+    if a.is_child_of(b) and b.is_child_of(c) and b in observed_nodes:
         return True
     # common cause: a <- b -> c and b is given => c is independent from a given b
-    if a in adjacency_list[b] and c in adjacency_list[b] and b in conditions:
+    if a.is_child_of(b) and b.is_parent_of(c) and b in observed_nodes:
         return True
     # common effect: a -> b <- c
-    if b in adjacency_list[a] and b in adjacency_list[c]:
+    if a.is_parent_of(b) and b.is_child_of(c):
         # check if b or a node reachable from b is given
         queue = deque()
         queue.append(b)
@@ -65,30 +65,29 @@ def d_separated_triple(a, b, c, adjacency_list, conditions):
             node = queue.popleft()
             if node not in visited:
                 visited.add(node)
-                if node in conditions:
+                if node in observed_nodes:
                     return False
-                for neighbor in adjacency_list[node]:
-                    queue.append(neighbor)
+                for child in node.children:
+                    queue.append(child)
         # b is not given and no node reachable from b is given => c is independent from a
         return True
     # no case was found so it is not d-separable
     return False
 
 
-def d_separated_path(path, adjacency_list, conditions):
+def d_separated_path(path, observed_nodes):
     i = 0
     while i < len(path) - 2:
-        if not d_separated_triple(path[i], path[i+1], path[i+2], adjacency_list, conditions):
+        if not d_separated_triple(path[i], path[i+1], path[i+2], observed_nodes):
             # if at least one triple is not d-separable then the path is not d-separable
             return False
         i += 1
     return True
 
 
-def d_separated(node_a, node_b, adjacency_list, conditions):
-    undirected_adjacency_list = arcs_to_edges(adjacency_list)
-    for path in paths_between(node_a, node_b, undirected_adjacency_list):
-        if not d_separated_path(path, adjacency_list, conditions):
+def d_separated(node_a, node_b, observed_nodes):
+    for path in paths_between(node_a, node_b):
+        if not d_separated_path(path, observed_nodes):
             # if at least one path is not d-separable then the node pair is not d-separable
             return False
     return True
