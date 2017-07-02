@@ -1,3 +1,4 @@
+from ai_algorithms.probabilities.probability import normalize
 from ai_algorithms.probabilities.sampling import sample_from_distribution, samples_from_distribution
 
 
@@ -21,14 +22,12 @@ def resample(particles, emission_probability, observation, random_state=None):
     :param random_state: random.RandomState; if None, default random state will be used
     :return: list of states; they must be hashable objects
     """
-    particle_weights = [emission_probability[observation][particle] for particle in particles]
-    total_weight = float(sum(particle_weights))
-    normalized_weights = [weight / total_weight for weight in particle_weights]
     probability = {}
-    for particle, normalized_weight in zip(particles, normalized_weights):
+    for particle in particles:
         if particle not in probability:
             probability[particle] = 0.0
-        probability[particle] += normalized_weight
+        probability[particle] += emission_probability[observation][particle]
+    probability = normalize(probability)
     return [sample_from_distribution(probability, random_state) for _ in particles]
 
 
@@ -39,13 +38,10 @@ def probability_from_particles(states, particles):
     :param particles: list of states; they must be hashable objects
     :return: dictionary of probabilities for every hidden state
     """
-    p = dict([(state, 0.0) for state in states])
+    probability = dict([(state, 0.0) for state in states])
     for particle in particles:
-        p[particle] += 1.0
-    total = float(len(particles))
-    for state in states:
-        p[state] /= total
-    return p
+        probability[particle] += 1.0
+    return normalize(probability)
 
 
 def particle_filtering(transition_probability, emission_probability, observations, prior, size, random_state=None):
