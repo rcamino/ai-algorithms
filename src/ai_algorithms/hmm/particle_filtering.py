@@ -1,4 +1,4 @@
-from ai_algorithms.probability import sample_from_distribution, samples_from_distribution
+from ai_algorithms.probabilities.probability import sample_from_distribution, samples_from_distribution
 
 
 def transition_sample(particles, transition_probability, random_state=None):
