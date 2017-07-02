@@ -1,3 +1,4 @@
+from ai_algorithms.probabilities.inference import observe
 from ai_algorithms.probabilities.probability import normalize
 from ai_algorithms.probabilities.sampling import sample_from_distribution, samples_from_distribution
 
@@ -10,7 +11,8 @@ def transition_sample(particles, transition_probability, random_state=None):
     :param random_state: random.RandomState; if None, default random state will be used
     :return: list of states; they must be hashable objects
     """
-    return [sample_from_distribution(transition_probability[particle], random_state) for particle in particles]
+    return [sample_from_distribution(observe(transition_probability, [None, particle]), random_state)
+            for particle in particles]
 
 
 def resample(particles, emission_probability, observation, random_state=None):
