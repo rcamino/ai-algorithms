@@ -38,7 +38,7 @@ def from_tuple_dictionary(tuple_probability, names):
             if value not in query:
                 query[value] = {}
             query = query[value]
-        last_value = value[size - 1]
+        last_value = values[size - 1]
         query[last_value] = p
     return from_dictionary(probability, names)
 
