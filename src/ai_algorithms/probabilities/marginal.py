@@ -2,16 +2,29 @@ from collections import deque
 
 
 def marginalize(joint_probability, query):
-    queue = deque()
+    """
+    Marginalize a joint probability over a list of variables.
+    :param joint_probability: multidimensional dictionary
+    :param query: indicates for every variable if it must be marginalized; can be any sequential structure of booleans
+    :return: marginal probability; multidimensional dictionary
+    """
+    query_queue = deque()
     count = 0
     for marginalize_variable in query:
         if marginalize_variable:
             count += 1
-        queue.append(marginalize_variable)
-    return marginalize_recursion(joint_probability, query, count)
+        query_queue.append(marginalize_variable)
+    return marginalize_recursion(joint_probability, query_queue, count)
 
 
 def marginalize_recursion(joint_probability, query, remaining):
+    """
+    Recursively marginalize a joint probability over a list of variables.
+    :param joint_probability: multidimensional dictionary
+    :param query: indicates for every variable if it must be marginalized; collections.deque of booleans
+    :param remaining: remaining True elements in query; int >= 0
+    :return: marginal probability; multidimensional dictionary
+    """
     if len(query) == 0:
         return joint_probability
     else:
@@ -34,6 +47,12 @@ def marginalize_recursion(joint_probability, query, remaining):
 
 
 def sum_joint_probabilities(joint_probabilities, size):
+    """
+    Sums a list of joint probability tables.
+    :param joint_probabilities: list of joint probability tables; every table is a multidimensional dictionary
+    :param size: amount of variables of the joint probability table; int >= 0
+    :return: joint probability table (or entry in base case); multidimensional dictionary (or float in base case)
+    """
     if size == 0:
         return sum(joint_probabilities)
     else:
