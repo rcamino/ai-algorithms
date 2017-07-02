@@ -10,7 +10,7 @@ def observation_step(emission_probability, observation, probability):
     :return: dictionary of probabilities for every hidden state
     """
     p = {}
-    for x, p_x in probability.keys():
+    for x, p_x in probability.items():
         p[x] = p_x * emission_probability[observation][x]
     return p
 
