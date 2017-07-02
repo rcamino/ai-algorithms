@@ -1,4 +1,5 @@
 from ai_algorithms.markov_chains.mini_forward import mini_forward_step
+from ai_algorithms.probabilities.probability import normalize
 
 
 def observation_step(emission_probability, observation, probability):
@@ -25,7 +26,8 @@ def forward_step(transition_probability, emission_probability, observation, prev
     :return: dictionary of probabilities for every hidden state
     """
     p = mini_forward_step(transition_probability, previous)
-    return observation_step(emission_probability, observation, p)
+    p = observation_step(emission_probability, observation, p)
+    return normalize(p)
 
 
 def forward(transition_probability, emission_probability, observations, prior):
