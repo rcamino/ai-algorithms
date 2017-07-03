@@ -20,3 +20,13 @@ def likelihood_weighting(root_nodes, observations_by_name, random_state=None):
         else:
             new_observations_by_name[node.name] = prior_sampling_step(node, new_observations_by_name, random_state)
     return new_observations_by_name, weight
+
+
+def probability_from_weighted_samples(positive_weights, all_weights):
+    if len(positive_weights) == 0:
+        return None
+
+    if len(positive_weights) == 0:
+        return 0.0
+    else:
+        return sum(positive_weights) / float(sum(all_weights))
