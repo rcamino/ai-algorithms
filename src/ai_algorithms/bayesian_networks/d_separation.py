@@ -32,19 +32,6 @@ def paths_between(node_a, node_b):
     return paths
 
 
-def arcs_to_edges(adjacency_list):
-    new_adjacency_list = {}
-    for node_from, neighbors in adjacency_list.items():
-        for node_to in neighbors:
-            if node_from not in new_adjacency_list:
-                new_adjacency_list[node_from] = set()
-            if node_to not in new_adjacency_list:
-                new_adjacency_list[node_to] = set()
-            new_adjacency_list[node_from].add(node_to)
-            new_adjacency_list[node_to].add(node_from)
-    return new_adjacency_list
-
-
 def d_separated_triple(a, b, c, observed_nodes):
     # causal chain: a -> b -> c and b is given => c is independent from a given b
     if a.is_parent_of(b) and b.is_parent_of(c) and b in observed_nodes:
