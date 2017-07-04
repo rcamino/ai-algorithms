@@ -3,6 +3,13 @@ import random
 
 
 def random_topological_order(root_nodes, random_state=None):
+    """
+    Generates an ordering for nodes from a Bayesian Network following the links them starting from the root nodes,
+    breaking ties in with random ordering.
+    :param root_nodes: Bayesian Network; collection of ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param random_state: random.RandomState; if None, default random state will be used
+    :return: sequence of ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    """
     if random_state is None:
         random_state = random.Random()
     nodes = []
