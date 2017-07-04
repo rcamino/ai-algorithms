@@ -2,6 +2,13 @@ from collections import deque
 
 
 def in_path_node(node, path_node):
+    """
+    Auxiliary function for the function 'paths_between', telling if a node is included in a path of nodes.
+    Works with a recursive tuple with the form (node, (node, ...)) where the base case is None.
+    :param node: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param path_node: tuple (ai_algorithms.bayesian_networks.node.BayesianNetworkNode, path_node)
+    :return: True if node is included the path, False otherwise
+    """
     while path_node is not None:
         parent, path_node = path_node
         if parent == node:
@@ -10,6 +17,14 @@ def in_path_node(node, path_node):
 
 
 def paths_between(node_a, node_b):
+    """
+    Generates all undirected paths between two nodes from a Bayesian Network.
+    It performs BFS keeping the parent node in every path,
+    making sure that a node does not appear twice in the same path.
+    :param node_a: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param node_b: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :return: list of lists of ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    """
     path_nodes = []
     queue = deque()
     queue.append((node_a, None))
@@ -33,6 +48,15 @@ def paths_between(node_a, node_b):
 
 
 def d_separated_triple(a, b, c, observed_nodes):
+    """
+    Given three contiguous nodes in a path from a Bayesian Network and a collection of observed nodes,
+    indicates if the first and the last nodes are independent.
+    :param a: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param b: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param c: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param observed_nodes:
+    :return: True if the first and last nodes are independent, False otherwise
+    """
     # causal chain: a -> b -> c and b is given => c is independent from a given b
     if a.is_parent_of(b) and b.is_parent_of(c) and b in observed_nodes:
         return True
@@ -63,6 +87,13 @@ def d_separated_triple(a, b, c, observed_nodes):
 
 
 def d_separated_path(path, observed_nodes):
+    """
+    Given a path between two nodes from a Bayesian Network and a collection of observed nodes,
+    indicates if the first and the last nodes are independent.
+    :param path: list of ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param observed_nodes: collection of ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :return: True if the first and last nodes are independent, False otherwise
+    """
     i = 0
     while i < len(path) - 2:
         if not d_separated_triple(path[i], path[i+1], path[i+2], observed_nodes):
@@ -73,6 +104,13 @@ def d_separated_path(path, observed_nodes):
 
 
 def d_separated(node_a, node_b, observed_nodes):
+    """
+    Indicates if two nodes from a Bayesian Network are independent given a collection of observed nodes.
+    :param node_a: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param node_b: ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :param observed_nodes: collection of ai_algorithms.bayesian_networks.node.BayesianNetworkNode
+    :return: True if the nodes are independent, False otherwise
+    """
     for path in paths_between(node_a, node_b):
         if not d_separated_path(path, observed_nodes):
             # if at least one path is not d-separable then the node pair is not d-separable
