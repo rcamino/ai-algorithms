@@ -7,6 +7,12 @@ class ActivationUnit(object):
         raise NotImplementedError
 
 
+class BinaryUnit(ActivationUnit):
+
+    def activate(self, values):
+        return [1.0 if value > 0.0 else 0.0 for value in values]
+
+
 class LinearUnit(ActivationUnit):
 
     def activate(self, values):
