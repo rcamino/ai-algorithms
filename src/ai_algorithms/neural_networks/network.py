@@ -1,4 +1,4 @@
-class FeedForwardNetwork(object):
+class NeuralNetwork(object):
 
     def __init__(self, layers):
         self.layers = layers

@@ -1,19 +1,19 @@
 import math
 
 
-class ActivationUnit(object):
+class Neuron(object):
 
     def activate(self, inputs):
         raise NotImplementedError
 
 
-class BinaryUnit(ActivationUnit):
+class Binary(Neuron):
 
     def activate(self, inputs):
         return [1.0 if value > 0.0 else 0.0 for value in inputs]
 
 
-class LinearUnit(ActivationUnit):
+class Linear(Neuron):
 
     def __init__(self, weight_matrix):
         self.weight_matrix = weight_matrix
@@ -28,30 +28,30 @@ class LinearUnit(ActivationUnit):
         return outputs
 
 
-class RectifiedUnit(ActivationUnit):
+class Rectified(Neuron):
 
     def activate(self, inputs):
         return [input_i if input_i > 0.0 else 0.0 for input_i in inputs]
 
 
-class Sigmoid(ActivationUnit):
+class Logistic(Neuron):
 
     def activate(self, inputs):
         return [1.0 / (1.0 + math.exp(-input_i)) for input_i in inputs]
 
 
-class Softmax(ActivationUnit):
+class Softmax(Neuron):
 
     def __init__(self):
-        self.sigmoid = Sigmoid()
+        self.logistic = Logistic()
 
     def activate(self, inputs):
-        sigmoid_outputs = self.sigmoid.activate(inputs)
-        norm = sum(sigmoid_outputs)
-        return [sigmoid_i / norm for sigmoid_i in sigmoid_outputs]
+        logits = self.logistic.activate(inputs)
+        norm = sum(logits)
+        return [logit / norm for logit in logits]
 
 
-class HyperbolicTangent(ActivationUnit):
+class HyperbolicTangent(Neuron):
 
     def activate(self, inputs):
         return map(math.tanh, inputs)
