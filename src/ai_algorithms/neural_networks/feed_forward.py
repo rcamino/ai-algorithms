@@ -1,32 +1,15 @@
 import random
 
-
-class FeedForwardLayer(object):
-
-    def __init__(self, weight_matrix, activation):
-        self.weight_matrix = weight_matrix
-        self.activation = activation
-
-    def emit(self, inputs):
-        outputs = []
-        for weights in self.weight_matrix:
-            output_i = 0.0
-            for input_i, weight_i in zip(inputs, weights):
-                output_i += input_i * weight_i
-            outputs.append(output_i)
-        return self.activation.activate(outputs)
-
-
 class FeedForwardNetwork(object):
 
     def __init__(self, layers):
         self.layers = layers
 
     def score(self, features):
-        values = features
+        last_layer_output = features
         for layer in self.layers:
-            values = layer.emit(values)
-        return values
+            last_layer_output = layer.activate(last_layer_output)
+        return last_layer_output
 
     def predict(self, features):
         scores = self.score(features)
