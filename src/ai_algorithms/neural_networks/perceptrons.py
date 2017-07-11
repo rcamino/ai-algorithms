@@ -24,7 +24,7 @@ class Perceptron(object):
         return prediction
 
     def predict(self, features):
-        return 1 if self.prediction(features) > 0 else 0
+        return 1 if self.score(features) > 0 else 0
 
 
 def update_perceptron(perceptron, features, direction):
