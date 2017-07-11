@@ -29,10 +29,9 @@ class FeedForwardNetwork(object):
         return values
 
     def predict(self, features):
-        pairs = enumerate(self.score(features))
-        sorted_pairs = sorted(pairs, reverse=True, key=lambda pair: pair[1])
-        best_pair = sorted_pairs[0]
-        return best_pair[0]
+        scores = self.score(features)
+        predictions = range(len(scores))
+        return sorted(predictions, reverse=True, key=lambda prediction: scores[prediction])[0]
 
 
 def create_random_weight_matrix(input_size, output_size, random_state=None):
