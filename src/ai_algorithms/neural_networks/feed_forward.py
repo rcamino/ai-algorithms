@@ -7,14 +7,14 @@ class FeedForwardLayer(object):
         self.weight_matrix = weight_matrix
         self.activation = activation
 
-    def score(self, features):
-        results = []
+    def emit(self, inputs):
+        outputs = []
         for weights in self.weight_matrix:
-            result = 0.0
-            for feature, weight in zip(features, weights):
-                result += feature * weight
-            results.append(result)
-        return self.activation.activate(results)
+            output_i = 0.0
+            for input_i, weight_i in zip(inputs, weights):
+                output_i += input_i * weight_i
+            outputs.append(output_i)
+        return self.activation.activate(outputs)
 
 
 class FeedForwardNetwork(object):
@@ -25,7 +25,7 @@ class FeedForwardNetwork(object):
     def score(self, features):
         values = features
         for layer in self.layers:
-            values = layer.score(values)
+            values = layer.emit(values)
         return values
 
     def predict(self, features):

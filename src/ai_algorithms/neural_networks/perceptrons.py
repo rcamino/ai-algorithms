@@ -4,10 +4,10 @@ class MultiClassPerceptron(object):
         self.perceptron_per_class = perceptron_per_class
 
     def score(self, features):
-        return [perceptron.score(features) for perceptron in self.perceptron_per_class.values()]
+        return [perceptron.emit(features) for perceptron in self.perceptron_per_class.values()]
 
     def predict(self, features):
-        pairs = [(prediction, perceptron.score(features))
+        pairs = [(prediction, perceptron.emit(features))
                  for prediction, perceptron in self.perceptron_per_class.items()]
         sorted_pairs = sorted(pairs, reverse=True, key=lambda pair: pair[1])
         best_pair = sorted_pairs[0]
