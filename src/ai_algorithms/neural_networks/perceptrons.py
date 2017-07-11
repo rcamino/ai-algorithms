@@ -33,13 +33,27 @@ def update_perceptron(perceptron, features, direction):
 
 
 def perceptron_learning(samples, labels, positive_label=1, iterations=1000):
-    multiclass_perceptron = multiclass_perceptron_learning(samples, labels, iterations)
-    return multiclass_perceptron.perceptron_per_class[positive_label]
-
-
-def multiclass_perceptron_learning(samples, labels, iterations=1000):
     n_features = len(samples[0])
-    possible_labels = set(labels)
+    perceptron = create_empty_perceptron(n_features)
+    for iteration in xrange(iterations):
+        change = False
+        for features, label in zip(samples, labels):
+            prediction = perceptron.predict(features)
+            if prediction != label:
+                change = True
+                if label == positive_label:
+                    update_perceptron(perceptron, features, 1)
+                else:
+                    update_perceptron(perceptron, features, -1)
+        if not change:
+            break
+    return perceptron
+
+
+def multiclass_perceptron_learning(samples, labels, possible_labels=None, iterations=1000):
+    n_features = len(samples[0])
+    if possible_labels is None:
+        possible_labels = set(labels)
     perceptron_per_class = {}
     for label in possible_labels:
         perceptron_per_class[label] = create_empty_perceptron(n_features)
