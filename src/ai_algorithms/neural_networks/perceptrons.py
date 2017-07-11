@@ -73,11 +73,3 @@ def multiclass_perceptron_learning(samples, labels, possible_labels=None, iterat
 
 def create_empty_perceptron(size):
     return Perceptron([0.0 for _ in xrange(size)])
-
-
-def add_bias_to_features(features):
-    return [1.0] + features
-
-
-def add_bias_to_samples(samples):
-    return map(add_bias_to_features, samples)
