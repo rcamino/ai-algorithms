@@ -1,7 +1,7 @@
 import math
 
 
-class Activation(object):
+class ActivationFunction(object):
 
     def activate(self, neuron_output):
         raise NotImplementedError
@@ -10,7 +10,7 @@ class Activation(object):
         raise NotImplementedError
 
 
-class Logistic(Activation):
+class Logistic(ActivationFunction):
 
     def activate(self, neuron_output):
         return 1.0 / (1.0 + math.exp(-neuron_output))
