@@ -1,4 +1,4 @@
-from ai_algorithms.neural_networks.perceptrons.perceptron import create_empty_perceptron, update_perceptron
+from ai_algorithms.perceptrons.perceptron import create_empty_perceptron, update_perceptron
 
 
 class MultiClassPerceptron(object):
