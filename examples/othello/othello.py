@@ -11,6 +11,10 @@ from ai_algorithms.reinforcement.learning_agent import LearningAgent
 State = namedtuple("State", ["board", "player"])
 
 
+def immutable_board(board):
+    return tuple(map(tuple, board))
+
+
 class Othello(Environment, UniformActions, RewardAware):
 
     board_size = 8
@@ -54,40 +58,51 @@ class Othello(Environment, UniformActions, RewardAware):
 
         flips = []
 
+        # move in every direction from the action
         for direction_i in self.directions:
             for direction_j in self.directions:
+                # omit the "null direction"
                 if direction_i == 0 and direction_j == 0:
                     continue
 
                 direction_flips = []
 
+                # start moving
                 i = action_i + direction_i
                 j = action_j + direction_j
 
+                # keep moving if possible and every disk is from the opponent
                 while self.is_inside_board(i, j) and board[i][j] == opponent:
                     direction_flips.append((i, j))
                     i += direction_i
                     j += direction_j
 
+                # if we found opponent disks and we finally find one of our disks
                 if len(direction_flips) > 0 and self.is_inside_board(i, j) and board[i][j] == player:
+                    # add all the opponent disks we found in this direction
                     flips.extend(direction_flips)
 
         return flips
 
     def actions_from(self, state):
         actions = []
+        # check every position
         for i in xrange(self.board_size):
             for j in xrange(self.board_size):
                 action = i, j
+                # if the position is empty and by taking it the player flips at least one disk
                 if state.board[i][j] is None and len(self.flips_after(state, action)) > 0:
+                    # add as a valid action
                     actions.append(action)
 
         return actions
 
     def is_goal_state(self, state):
+        # the game finishes when the current player cannot flip any disk
         return len(self.actions_from(state)) == 0
 
     def start_state(self):
+        # create an empty board
         board = []
         for i in xrange(self.board_size):
             row = []
@@ -95,15 +110,16 @@ class Othello(Environment, UniformActions, RewardAware):
                 row.append(None)
             board.append(row)
 
+        # fill the four spaces in the middle
         board[3][3] = self.player_1.name
         board[3][4] = self.player_2.name
         board[4][3] = self.player_2.name
         board[4][4] = self.player_1.name
 
-        board = map(tuple, board)
-        return State(board=tuple(board), player=self.player_1.name)
+        return State(board=immutable_board(board), player=self.player_1.name)
 
     def evaluate(self, state, agent):
+        # count the disks of the player
         disks = 0
         for i in xrange(self.board_size):
             for j in xrange(self.board_size):
@@ -112,19 +128,24 @@ class Othello(Environment, UniformActions, RewardAware):
         return disks
 
     def react(self, state, agent, action):
+        # check valid player
         player = agent.name
         if player != state.player:
             raise Exception("Invalid agent turn.")
 
+        # check valid action
         action_i, action_j = action
         if state.board[action_i][action_j] is not None:
             raise Exception("Invalid action: non empty space.")
 
+        # calculate the flipped disks
         flips = self.flips_after(state, action)
 
+        # check if there are flips
         if len(flips) == 0:
             raise Exception("Invalid action: no flips.")
 
+        # copy the board
         board = []
         for i in xrange(self.board_size):
             row = []
@@ -132,23 +153,24 @@ class Othello(Environment, UniformActions, RewardAware):
                 row.append(state.board[i][j])
             board.append(row)
 
+        # add the player disk
         board[action_i][action_j] = player
 
+        # flip the opponent disks
         for i, j in flips:
             board[i][j] = player
 
-        board = tuple(map(tuple, board))
-
         if agent == self.player_1:
-            return State(board=board, player=self.player_2.name)
+            return State(board=immutable_board(board), player=self.player_2.name)
         else:
-            return State(board=board, player=self.player_1.name)
+            return State(board=immutable_board(board), player=self.player_1.name)
 
     def reward(self, state_from, action, state_to):
         if state_to.player == self.player_1.name:
             agent = self.player_1
         else:
             agent = self.player_2
+        # new amount of disks minus previous amount of disks
         return self.evaluate(state_to, agent) - self.evaluate(state_from, agent)
 
     def next_agent(self, state):
@@ -184,7 +206,7 @@ class OthelloAgent(LearningAgent):
 
 def run_timed_episodes(environment, episodes):
     total_time = 0.0
-    wins = {"W": 0, "B": 0}
+    wins = {environment.player_1: 0, environment.player_2: 0}
 
     for _ in xrange(episodes):
         start_time = time.time()
@@ -193,7 +215,7 @@ def run_timed_episodes(environment, episodes):
 
         winner = environment.evaluate_winner(final_state)
         if winner is not None:
-            wins[winner.name] += 1
+            wins[winner] += 1
 
         elapsed_time = time.time() - start_time
         total_time += elapsed_time
