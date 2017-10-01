@@ -162,7 +162,7 @@ class TicTacToeAgent(LearningAgent):
 
 def run_timed_episodes(environment, episodes):
     total_time = 0.0
-    wins = {"X": 0, "O": 0}
+    wins = {environment.player_1.name: 0, environment.player_2.name: 0}
 
     for _ in xrange(episodes):
         start_time = time.time()
