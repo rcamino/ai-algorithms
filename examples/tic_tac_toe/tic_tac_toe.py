@@ -4,7 +4,6 @@ from collections import namedtuple
 
 from ai_algorithms.environment.episode import run_episode
 from ai_algorithms.environment.models import Environment, UniformActions
-from ai_algorithms.environment.agent import Agent
 from ai_algorithms.model import RewardAware
 from ai_algorithms.reinforcement.learning_agent import LearningAgent
 
