@@ -7,6 +7,7 @@ from ai_algorithms.environment.models import Environment, UniformActions
 from ai_algorithms.model import RewardAware
 from ai_algorithms.reinforcement.learning_agent import LearningAgent
 
+
 State = namedtuple("State", ["board", "player", "winner", "moves"])
 
 
@@ -171,11 +172,18 @@ def run_timed_episodes(environment, episodes):
         if final_state.winner is not None:
             wins[final_state.winner] += 1
 
-        total_time += time.time() - start_time
+        elapsed_time = time.time() - start_time
+        total_time += elapsed_time
+
+        print "Game finished in {:.2f} (seconds)".format(elapsed_time)
+        if final_state.winner is not None:
+            print final_state.winner, "wins the game!"
+        else:
+            print "Tie!"
 
     print
-    print "Total time (seconds):", total_time
-    print "Average time (seconds):", total_time / episodes
+    print "Total time: {:.2f} (seconds)".format(total_time)
+    print "Average time: {:.2f} (seconds)".format(total_time / episodes)
     print
     print "Scoreboard"
     for k, v in wins.items():
