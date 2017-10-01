@@ -5,7 +5,7 @@ def run_training(environment, learning_agents, episodes):
     """
     Runs several episodes where a collection of learning agents can learn about their action outcomes.
     :param environment: must implement ai_algorithms.environment.models.Environment
-    :param learning_agents: set of agents; they must ai_algorithms.reinforcement.learning_agent.LearningAgent
+    :param learning_agents: set of agents; they must implement ai_algorithms.reinforcement.learning_agent.LearningAgent
     :param episodes: number of episodes to be run
     """
     for _ in xrange(episodes):
