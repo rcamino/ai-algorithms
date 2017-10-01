@@ -18,7 +18,7 @@ class TicTacToe(Environment, UniformActions, RewardAware):
         self.player_2 = player_2
         self.board_size = board_size
 
-    def agents(self):
+    def agents(self, state):
         return [self.player_1, self.player_2]
 
     def react(self, state, agent, action):
@@ -47,7 +47,7 @@ class TicTacToe(Environment, UniformActions, RewardAware):
 
     def next_agent(self, state):
         if state.winner is None:
-            for agent in self.agents():
+            for agent in self.agents(state):
                 if agent.name == state.player:
                     return agent
         return None
