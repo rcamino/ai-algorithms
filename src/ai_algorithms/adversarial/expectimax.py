@@ -16,7 +16,7 @@ class Expectimax(AgentStrategy):
         :param agent: must implement ai_algorithms.environment.agent.Agent
         :return: chosen action; must be a hashable object
         """
-        agents = [agent] + [other_agent for other_agent in sorted(environment.agents()) if agent != other_agent]
+        agents = [agent] + [other_agent for other_agent in sorted(environment.agents(state)) if agent != other_agent]
         _, action = self.next_transition(environment, state, self.depth, agents, 0)
         return action
 
